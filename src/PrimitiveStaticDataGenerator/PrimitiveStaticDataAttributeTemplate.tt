@@ -1,0 +1,20 @@
+﻿<#@ template language="C#" linePragmas="false" visibility="internal" inherits="T4TemplateBase" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="PrimitiveStaticDataGenerator.Internal" #>
+using System;
+
+namespace <#= Namespace #>
+{
+    [AttributeUsage(AttributeTargets.ReturnValue, Inherited = false, AllowMultiple = false)]
+    internal sealed class <#= TypeName #> : Attribute
+    {
+<# foreach (var type in new string[] { "bool", "byte", "double", "float", "int", "long", "sbyte", "short", "uint", "ulong", "ushort", "char", }) { #>
+        internal <#= TypeName #>(params <#= type #>[] values) { }
+<# } #>
+    }
+}
+<#+
+        private const string Namespace = "PrimitiveStaticDataGenerator";
+        private const string TypeName = "PrimitiveStaticDataAttribute";
+        internal const string TypeFullName = Namespace + "." + TypeName;
+#>
