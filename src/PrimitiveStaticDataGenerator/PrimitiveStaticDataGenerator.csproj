@@ -4,6 +4,18 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>preview</LangVersion>
     <Nullable>enable</Nullable>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    
+    <PackageId>PrimitiveStaticDataGenerator</PackageId>
+    <Version>1.0.0-beta</Version>
+    <Authors>iiweis</Authors>
+    <Description>C# Source Generator for creating methods that return optimized ReadOnlySpan&lt;T&gt; static data from primitive values.</Description>
+    <Copyright>© 2021 iiweis</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/iiweis/PrimitiveStaticDataGenerator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>SourceGenerator</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +26,10 @@
     <None Update="PrimitiveStaticDataAttributeTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>PrimitiveStaticDataAttributeTemplate.cs</LastGenOutput>
+    </None>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
     </None>
   </ItemGroup>
 
@@ -27,6 +43,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PrimitiveStaticDataAttributeTemplate.tt</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
 
 </Project>
