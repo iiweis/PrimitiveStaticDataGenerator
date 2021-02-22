@@ -8,7 +8,7 @@
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     
     <PackageId>PrimitiveStaticDataGenerator</PackageId>
-    <Version>1.0.0-beta</Version>
+    <Version>1.0.1-beta</Version>
     <Authors>iiweis</Authors>
     <Description>C# Source Generator for creating methods that return optimized ReadOnlySpan&lt;T&gt; static data from primitive values.</Description>
     <Copyright>© 2021 iiweis</Copyright>
