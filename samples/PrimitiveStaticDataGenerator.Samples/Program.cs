@@ -17,6 +17,7 @@ static partial class Root
         Write<ushort>(UShort());
         ChildStruct.Write();
         ChildClass<object>.Write();
+        Write(MyNamespace.MyClass.OneTwoThree());
     }
 
     static void Write<T>(ReadOnlySpan<T> span)
@@ -81,5 +82,19 @@ static partial class Root
 
         [return: PrimitiveStaticData(0, 1, -1, double.MinValue, double.MaxValue)]
         protected static partial ReadOnlySpan<double> Double();
+    }
+}
+
+namespace MyNamespace
+{
+    using StaticData = PrimitiveStaticDataGenerator.PrimitiveStaticDataAttribute;
+
+    partial class MyClass
+    {
+        void Dummy(string[] args) { }
+
+        [return: StaticData(1, 2, 3)]
+        public static partial ReadOnlySpan<int> OneTwoThree();
+
     }
 }

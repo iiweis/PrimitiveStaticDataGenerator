@@ -115,7 +115,7 @@ namespace PrimitiveStaticDataGenerator.Internal
         {
             if (method is null) Throw(new ArgumentNullException(nameof(method)));
 
-             TypeDeclarationSyntax? typeDeclaration = null;
+            TypeDeclarationSyntax? typeDeclaration = null;
 
             foreach (var type in method!.ParentNodes().OfType<TypeDeclarationSyntax>().Reverse().Select(t => t.WithAttributeLists(default).WithMembers(default)))
             {
@@ -134,8 +134,8 @@ namespace PrimitiveStaticDataGenerator.Internal
 
             compilationUnit = compilationUnit.AddUsings(method.SyntaxTree.GetCompilationUnitRoot().Usings.ToArray());
 
-            NamespaceDeclarationSyntax @namespace = method.ParentNodes().OfType<NamespaceDeclarationSyntax>().LastOrDefault();
-
+            var @namespace = method.ParentNodes().OfType<NamespaceDeclarationSyntax>().LastOrDefault()?.WithMembers(default);
+            
             MethodDeclarationSyntax methodDeclaration = action(method.WithAttributeLists(default).WithSemicolonToken(default));
 
             if (typeDeclaration!.DescendantNodes().OfType<TypeDeclarationSyntax>().LastOrDefault() is { } lastType)

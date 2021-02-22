@@ -150,8 +150,7 @@ namespace PrimitiveStaticDataGenerator
 
                             block = block.ReplaceNode(block.DescendantNodeAt<ReturnStatementSyntax>(0), @return);
 
-                            CompilationUnitSyntax methodImplementation = 
-                                Util.ImplementPartial(methodSyntax, m => m.WithBody(block));
+                            CompilationUnitSyntax methodImplementation = methodSyntax.ImplementPartial(m => m.WithBody(block));
 
                             methodImplementation = methodImplementation.AddUsings(UsingDirective(ParseName(memoryMarshalSymbol.ContainingNamespace.ToDisplayString())));
                             methodImplementation = methodImplementation.AddUsings(UsingDirective(ParseName(unsafeSymbol.ContainingNamespace.ToDisplayString())));
