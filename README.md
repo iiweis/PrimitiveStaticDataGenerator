@@ -1,5 +1,7 @@
 # PrimitiveStaticDataGenerator
 
+[![Nuget](https://img.shields.io/nuget/v/PrimitiveStaticDataGenerator?color=1f6feb)](https://www.nuget.org/packages/PrimitiveStaticDataGenerator)
+
 ## Usage
 
 user code:
