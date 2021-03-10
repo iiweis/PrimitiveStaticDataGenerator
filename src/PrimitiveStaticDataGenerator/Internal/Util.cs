@@ -132,7 +132,7 @@ namespace PrimitiveStaticDataGenerator.Internal
 
             CompilationUnitSyntax compilationUnit = SyntaxFactory.CompilationUnit();
 
-            compilationUnit = compilationUnit.AddUsings(method.SyntaxTree.GetCompilationUnitRoot().Usings.ToArray());
+            compilationUnit = compilationUnit.AddUsings(method!.SyntaxTree.GetCompilationUnitRoot().Usings.ToArray());
 
             var @namespace = method.ParentNodes().OfType<NamespaceDeclarationSyntax>().LastOrDefault()?.WithMembers(default);
             

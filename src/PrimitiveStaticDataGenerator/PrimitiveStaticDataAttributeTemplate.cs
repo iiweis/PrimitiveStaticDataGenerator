@@ -23,20 +23,24 @@ namespace PrimitiveStaticDataGenerator
         /// </summary>
         public override string TransformText()
         {
-            this.Write("using System;\r\n\r\nnamespace ");
+            this.Write("\n");
+            this.Write("\n");
+            this.Write("\nusing System;\n\nnamespace ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
-            this.Write("\r\n{\r\n    [AttributeUsage(AttributeTargets.ReturnValue, Inherited = false, AllowMu" +
-                    "ltiple = false)]\r\n    internal sealed class ");
+            this.Write("\n{\n    [AttributeUsage(AttributeTargets.ReturnValue, Inherited = false, AllowMult" +
+                    "iple = false)]\n    internal sealed class ");
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
-            this.Write(" : Attribute\r\n    {\r\n");
+            this.Write(" : Attribute\n    {\n");
  foreach (var type in new string[] { "bool", "byte", "double", "float", "int", "long", "sbyte", "short", "uint", "ulong", "ushort", "char", }) { 
-            this.Write("        internal ");
+            this.Write("\n        internal ");
             this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
             this.Write("(params ");
             this.Write(this.ToStringHelper.ToStringWithCulture(type));
-            this.Write("[] values) { }\r\n");
+            this.Write("[] values) { }\n");
  } 
-            this.Write("    }\r\n}\r\n");
+            this.Write("\n        internal ");
+            this.Write(this.ToStringHelper.ToStringWithCulture(TypeName));
+            this.Write("(string value) { }\n    }\n}\n");
             return this.GenerationEnvironment.ToString();
         }
 

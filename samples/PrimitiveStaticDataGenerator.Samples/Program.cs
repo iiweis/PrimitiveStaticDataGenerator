@@ -15,6 +15,7 @@ static partial class Root
         Write<char>(Char());
         Write<short>(Short());
         Write<ushort>(UShort());
+        Write<char>(String());
         ChildStruct.Write();
         ChildClass<object>.Write();
         Write(MyNamespace.MyClass.OneTwoThree());
@@ -45,6 +46,9 @@ static partial class Root
 
     [return: PrimitiveStaticData(new ushort[] { 1, 2, 3, ushort.MinValue, ushort.MaxValue })]
     public static partial ReadOnlySpan<ushort> UShort();
+
+    [return: PrimitiveStaticData("あアaA")]
+    public static partial ReadOnlySpan<char> String();
 
     public partial struct ChildStruct
     {

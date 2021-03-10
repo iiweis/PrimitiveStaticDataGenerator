@@ -11,6 +11,7 @@ namespace <#= Namespace #>
 <# foreach (var type in new string[] { "bool", "byte", "double", "float", "int", "long", "sbyte", "short", "uint", "ulong", "ushort", "char", }) { #>
         internal <#= TypeName #>(params <#= type #>[] values) { }
 <# } #>
+        internal <#= TypeName #>(string value) { }
     }
 }
 <#+

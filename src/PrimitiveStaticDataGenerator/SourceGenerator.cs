@@ -16,7 +16,6 @@ namespace PrimitiveStaticDataGenerator
     [Generator]
     class SourceGenerator : ISourceGenerator
     {
-
         public void Initialize(GeneratorInitializationContext context) { }
 
         public void Execute(GeneratorExecutionContext context)
@@ -68,21 +67,52 @@ namespace PrimitiveStaticDataGenerator
                             || attr.ConstructorArguments.Length < 1) continue;
 
                         TypedConstant arg1 = attr.ConstructorArguments[0];
-                        if (arg1.Kind != TypedConstantKind.Array || arg1.IsNull) continue;
 
-                        var arraySymbol = (IArrayTypeSymbol)arg1.Type!;
-                        if (arg1.Values.Length == 0
-                            || !arg1.Values.All(v => v.Kind == TypedConstantKind.Primitive)
-                            || !equalsSymbol(arraySymbol.ElementType, returnSpanType.TypeArguments[0])) continue;
+                        bool argIsSingleByteValues = false;
+                        IArrayTypeSymbol arraySymbol;
+                        object[] values = default!;
+                        if(arg1.Kind == TypedConstantKind.Array)
+                        {
+                            arraySymbol = (IArrayTypeSymbol)arg1.Type!;
+                            if (arg1.Values.Length == 0
+                                || !arg1.Values.All(v => v.Kind == TypedConstantKind.Primitive)
+                                || !equalsSymbol(arraySymbol.ElementType, returnSpanType.TypeArguments[0])) continue;
 
+                            argIsSingleByteValues = arraySymbol.ElementType.SpecialType is SpecialType.System_Boolean or SpecialType.System_SByte or SpecialType.System_Byte;
+
+                            if (argIsSingleByteValues)
+                            {
+                                values = arg1.Values.Select(v => v.ToCSharpString()).ToArray();
+                            }
+                            else
+                            {
+                                values = arg1.Values.Select(v => v.Value!).ToArray();
+                            }
+                        }
+                        else if (arg1.Kind == TypedConstantKind.Primitive 
+                                 && equalsSymbol(arg1.Type, compilation.GetSpecialType(SpecialType.System_String))
+                                 && returnSpanType.TypeArguments[0].SpecialType is SpecialType.System_Char )
+                        {
+                            var str = (string?)arg1.Value;
+                            if (string.IsNullOrEmpty(str)) continue;
+
+                            arraySymbol = compilation.CreateArrayTypeSymbol(compilation.GetSpecialType(SpecialType.System_Char));
+
+                            values = Array.ConvertAll(str!.ToCharArray(), c => (object)c);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                  
                         var typeKeyword = arraySymbol.ElementType.ToDisplayString(new SymbolDisplayFormat(
                                           typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameOnly,
                                           miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes));
 
                         SourceText generatedSource;
-                        if (arraySymbol.ElementType.SpecialType is SpecialType.System_Boolean or SpecialType.System_SByte or SpecialType.System_Byte)
+                        if (argIsSingleByteValues)
                         {
-                            var arrayCreation = (ArrayCreationExpressionSyntax)ParseExpression($"new {typeKeyword}[] {{ {string.Join(", ", arg1.Values.Select(v => v.ToCSharpString()))} }}", options: parseOptions);
+                            var arrayCreation = (ArrayCreationExpressionSyntax)ParseExpression($"new {typeKeyword}[] {{ {string.Join(", ", values)} }}", options: parseOptions);
 
                             CompilationUnitSyntax methodImplementation = methodSyntax.ImplementPartial(
                                 m => m.WithExpressionBody(ArrowExpressionClause(arrayCreation)).
@@ -105,8 +135,6 @@ namespace PrimitiveStaticDataGenerator
     }
     return default;
 }";
-                            object[] values = arg1.Values.Select(v => v.Value!).ToArray();
-
                             var block = (BlockSyntax)ParseStatement(generateCodeBase, options: parseOptions);
 
                             var littleEndianValues = SeparatedList<ExpressionSyntax>(
