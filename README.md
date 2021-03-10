@@ -77,3 +77,4 @@ namespace MyCode
 - ulong
 - float
 - double
+- string
