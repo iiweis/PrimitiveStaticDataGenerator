@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimitiveStaticDataGenerato
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrimitiveStaticDataGenerator.Samples", "samples\PrimitiveStaticDataGenerator.Samples\PrimitiveStaticDataGenerator.Samples.csproj", "{CC22A48B-135E-43DB-8761-58304A3A57D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrimitiveStaticDataGenerator.Tests", "tests\PrimitiveStaticDataGenerator.Tests\PrimitiveStaticDataGenerator.Tests.csproj", "{C6A562FD-DE5E-41CB-9754-8A4063388AA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CC22A48B-135E-43DB-8761-58304A3A57D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC22A48B-135E-43DB-8761-58304A3A57D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC22A48B-135E-43DB-8761-58304A3A57D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6A562FD-DE5E-41CB-9754-8A4063388AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6A562FD-DE5E-41CB-9754-8A4063388AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6A562FD-DE5E-41CB-9754-8A4063388AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6A562FD-DE5E-41CB-9754-8A4063388AA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

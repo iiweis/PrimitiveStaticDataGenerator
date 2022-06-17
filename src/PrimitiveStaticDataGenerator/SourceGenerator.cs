@@ -14,7 +14,7 @@ using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 namespace PrimitiveStaticDataGenerator
 {
     [Generator]
-    class SourceGenerator : ISourceGenerator
+    public class SourceGenerator : ISourceGenerator
     {
         public void Initialize(GeneratorInitializationContext context) { }
 
