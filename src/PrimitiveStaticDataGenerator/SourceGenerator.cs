@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.Text;
 using PrimitiveStaticDataGenerator.Internal;
 using System;
 using System.Buffers.Binary;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -23,6 +24,8 @@ namespace PrimitiveStaticDataGenerator
                 SourceText attributeSourceText = constractSourceText(new PrimitiveStaticDataAttributeTemplate().TransformText());
                 context.AddSource(PrimitiveStaticDataAttributeTemplate.TypeFullName, attributeSourceText);
             });
+
+            context.RegisterForSyntaxNotifications(() => new StaticPartialMethodDeclarationSyntaxReceiver());
         }
 
         public void Execute(GeneratorExecutionContext context)
@@ -40,18 +43,11 @@ namespace PrimitiveStaticDataGenerator
 
             try
             {
+                if (context.SyntaxReceiver is not StaticPartialMethodDeclarationSyntaxReceiver syntaxReceiver)
+                    return;
+
                 INamedTypeSymbol attrSymbol = compilation.GetTypeByMetadataName(PrimitiveStaticDataAttributeTemplate.TypeFullName)!;
-
-                var candidateMethodSyntaxes = compilation.
-                    SyntaxTrees.
-                    SelectMany(tree => tree.GetRoot().DescendantNodes()).
-                    OfType<MethodDeclarationSyntax>().
-                    Where(method => method.IsExtendedPartial()
-                        && method.Modifiers.Any(SyntaxKind.StaticKeyword)
-                        && method.AttributeLists.Count > 0
-                        && method.ParentNodes().OfType<TypeDeclarationSyntax>().All(type => type.Modifiers.Any(SyntaxKind.PartialKeyword)));
-
-                foreach (var methodSyntax in candidateMethodSyntaxes)
+                foreach (var methodSyntax in syntaxReceiver.Syntaxes)
                 {
                     SemanticModel semantic = compilation.GetSemanticModel(methodSyntax.SyntaxTree);
 
@@ -362,5 +358,22 @@ namespace PrimitiveStaticDataGenerator
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static SourceText constractSourceText(string text)
             => SourceText.From(text, Encoding.UTF8);
+
+        private class StaticPartialMethodDeclarationSyntaxReceiver : ISyntaxReceiver
+        {
+            public List<MethodDeclarationSyntax> Syntaxes { get; } = new();
+
+            public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
+            {
+                if (syntaxNode is MethodDeclarationSyntax method
+                    && method.IsExtendedPartial()
+                    && method.Modifiers.Any(SyntaxKind.StaticKeyword)
+                    && method.AttributeLists.Count > 0
+                    && method.ParentNodes().OfType<TypeDeclarationSyntax>().All(type => type.Modifiers.Any(SyntaxKind.PartialKeyword)))
+                {
+                    Syntaxes.Add(method);
+                }
+            }
+        }
     }
 }
