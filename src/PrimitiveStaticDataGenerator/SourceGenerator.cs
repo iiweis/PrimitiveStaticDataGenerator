@@ -16,7 +16,14 @@ namespace PrimitiveStaticDataGenerator
     [Generator]
     public class SourceGenerator : ISourceGenerator
     {
-        public void Initialize(GeneratorInitializationContext context) { }
+        public void Initialize(GeneratorInitializationContext context)
+        {
+            context.RegisterForPostInitialization(context =>
+            {
+                SourceText attributeSourceText = constractSourceText(new PrimitiveStaticDataAttributeTemplate().TransformText());
+                context.AddSource(PrimitiveStaticDataAttributeTemplate.TypeFullName, attributeSourceText);
+            });
+        }
 
         public void Execute(GeneratorExecutionContext context)
         {
@@ -31,13 +38,8 @@ namespace PrimitiveStaticDataGenerator
             if (!(compilation.GetTypeByMetadataName("System.Runtime.CompilerServices.Unsafe") is { } unsafeSymbol)) return;
             if (!(compilation.GetTypeByMetadataName("System.Runtime.InteropServices.MemoryMarshal") is { } memoryMarshalSymbol)) return;
 
-            SourceText attributeSourceText = constractSourceText(new PrimitiveStaticDataAttributeTemplate().TransformText());
-            context.AddSource(PrimitiveStaticDataAttributeTemplate.TypeFullName, attributeSourceText);
-
             try
             {
-                compilation = compilation.AddSyntaxTrees(CSharpSyntaxTree.ParseText(attributeSourceText, options: parseOptions));
-
                 INamedTypeSymbol attrSymbol = compilation.GetTypeByMetadataName(PrimitiveStaticDataAttributeTemplate.TypeFullName)!;
 
                 var candidateMethodSyntaxes = compilation.
@@ -354,9 +356,11 @@ namespace PrimitiveStaticDataGenerator
             static bool equalsSymbol(ISymbol? symbol1, ISymbol? symbol2)
                 => SymbolEqualityComparer.Default.Equals(symbol1, symbol2);
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            static SourceText constractSourceText(string text)
-                => SourceText.From(text, Encoding.UTF8);
+
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static SourceText constractSourceText(string text)
+            => SourceText.From(text, Encoding.UTF8);
     }
 }
