@@ -35,11 +35,11 @@ namespace PrimitiveStaticDataGenerator
 #endif
             if (!(context.Compilation is CSharpCompilation compilation)) return;
             if (!(context.ParseOptions is CSharpParseOptions parseOptions)) return;
-          
+
             // check if required types exists.
-            if (!(compilation.GetTypeByMetadataName("System.ReadOnlySpan`1") is { } readOnlySpanSymbol)) return;
-            if (!(compilation.GetTypeByMetadataName("System.Runtime.CompilerServices.Unsafe") is { } unsafeSymbol)) return;
-            if (!(compilation.GetTypeByMetadataName("System.Runtime.InteropServices.MemoryMarshal") is { } memoryMarshalSymbol)) return;
+            if (!(compilation.GetTypesByMetadataName("System.ReadOnlySpan`1").FirstOrDefault(Util.IsPublic) is { } readOnlySpanSymbol)) return;
+            if (!(compilation.GetTypesByMetadataName("System.Runtime.CompilerServices.Unsafe").FirstOrDefault(Util.IsPublic) is { } unsafeSymbol)) return;
+            if (!(compilation.GetTypesByMetadataName("System.Runtime.InteropServices.MemoryMarshal").FirstOrDefault(Util.IsPublic) is { } memoryMarshalSymbol)) return;
 
             try
             {

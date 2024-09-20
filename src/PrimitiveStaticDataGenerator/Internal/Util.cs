@@ -160,5 +160,7 @@ namespace PrimitiveStaticDataGenerator.Internal
             return compilationUnit;
         }
 
+        internal static bool IsPublic(this ISymbol symbol)
+            => symbol.DeclaredAccessibility == Accessibility.Public;
     }
 }
