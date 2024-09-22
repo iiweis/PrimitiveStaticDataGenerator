@@ -2,6 +2,12 @@
 
 [![Nuget](https://img.shields.io/nuget/v/PrimitiveStaticDataGenerator?color=1f6feb)](https://www.nuget.org/packages/PrimitiveStaticDataGenerator)
 
+> [!NOTE]
+> This library was created at a time when optimization using ReadOnlySpan for constant arrays had the limitation that it did not apply to primitive types that are not single byte.
+> 
+> Since this restriction has been removed by the support of dotnet/roslyn#61414, there is little point in using this library in .NET 7 and later environments.<br>
+> For more information on dotnet/roslyn#61414, check out [Performance Improvements in .NET 8 | Initialization](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-8/#initialization). 
+
 ## Usage
 
 ### user code
